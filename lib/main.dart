@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'routes.dart';
+import 'screens/city_game_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/myth_game_screen.dart';
 import 'state/app_state.dart';
@@ -42,6 +43,18 @@ class _NucleoAppState extends State<NucleoApp> {
               _state.setMythProgress(
                 total == 0 ? 0 : (correct * 100 / total).round(),
               );
+            },
+          ),
+        );
+        break;
+      case AppRoutes.city:
+        builder = (context) => ListenableBuilder(
+          listenable: _state,
+          builder: (context, _) => CityGameScreen(
+            userName: _state.userName,
+            onWin: () {
+              _state.addXp(300);
+              _state.setCityProgress(100);
             },
           ),
         );

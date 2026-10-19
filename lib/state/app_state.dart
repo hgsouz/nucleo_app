@@ -51,12 +51,12 @@ class AppState extends ChangeNotifier {
   }
 
   void setMythProgress(int percent) {
-    _mythProgress = percent.clamp(0, 100);
+    _mythProgress = percent.clamp(0, 100).toInt();
     notifyListeners();
   }
 
   void setCityProgress(int percent) {
-    _cityProgress = percent.clamp(0, 100);
+    _cityProgress = percent.clamp(0, 100).toInt();
     notifyListeners();
   }
 
