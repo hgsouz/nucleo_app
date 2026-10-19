@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'theme/app_theme.dart';
+
 void main() {
   runApp(const NucleoApp());
 }
@@ -9,10 +11,11 @@ class NucleoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Núcleo',
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: Center(child: Text('Núcleo'))),
+      theme: AppTheme.light,
+      home: const Scaffold(body: Center(child: Text('Núcleo'))),
     );
   }
 }
