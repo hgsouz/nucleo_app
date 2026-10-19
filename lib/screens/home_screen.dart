@@ -12,7 +12,7 @@ import '../widgets/nucleo_logo.dart';
 import '../widgets/page_header.dart';
 
 /// Tela inicial: apresentação do projeto, desafios e ranking.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final String? userName;
   final int xp;
 
@@ -23,6 +23,10 @@ class HomeScreen extends StatelessWidget {
   /// Ranking já ordenado (maior pontuação primeiro).
   final List<RankEntry> ranking;
 
+  /// Parâmetro recebido da tela de login (via argumentos da rota).
+  /// Quando informado, exibe uma mensagem de boas-vindas.
+  final String? welcomeName;
+
   const HomeScreen({
     super.key,
     required this.userName,
@@ -30,9 +34,26 @@ class HomeScreen extends StatelessWidget {
     required this.mythProgress,
     required this.cityProgress,
     required this.ranking,
+    this.welcomeName,
   });
 
-  int get level => xp ~/ 500 + 1;
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int get _level => widget.xp ~/ 500 + 1;
+
+  @override
+  void initState() {
+    super.initState();
+    final name = widget.welcomeName;
+    if (name != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) showAppSnackBar(context, 'Bem-vindo(a), $name!');
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +67,20 @@ class HomeScreen extends StatelessWidget {
             PageHeader(
               title: 'Energia para descobrir',
               subtitle: 'Ciência clara. Escolhas conscientes.',
-              userName: userName,
+              userName: widget.userName,
             ),
             const _HeroCard(),
             const SizedBox(height: 32),
             const _AboutSection(),
             _ChallengesSection(
-              level: level,
-              mythProgress: mythProgress,
-              cityProgress: cityProgress,
+              level: _level,
+              mythProgress: widget.mythProgress,
+              cityProgress: widget.cityProgress,
             ),
-            _RankingSection(ranking: ranking, userName: userName),
+            _RankingSection(
+              ranking: widget.ranking,
+              userName: widget.userName,
+            ),
           ],
         ),
       ),

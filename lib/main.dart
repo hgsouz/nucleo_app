@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'routes.dart';
 import 'screens/city_game_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 import 'screens/myth_game_screen.dart';
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
@@ -59,8 +60,15 @@ class _NucleoAppState extends State<NucleoApp> {
           ),
         );
         break;
+      case AppRoutes.login:
+        builder = (context) => LoginScreen(onLogin: _state.login);
+        break;
       case AppRoutes.home:
       default:
+        // Nome recebido como argumento da rota (vem da tela de login).
+        final welcomeName = settings.arguments is String
+            ? settings.arguments as String
+            : null;
         builder = (context) => ListenableBuilder(
           listenable: _state,
           builder: (context, _) => HomeScreen(
@@ -69,6 +77,7 @@ class _NucleoAppState extends State<NucleoApp> {
             mythProgress: _state.mythProgress,
             cityProgress: _state.cityProgress,
             ranking: _state.ranking,
+            welcomeName: welcomeName,
           ),
         );
     }

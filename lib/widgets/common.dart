@@ -146,14 +146,21 @@ class ProgressBar extends StatelessWidget {
 }
 
 /// Mostra uma mensagem rápida (SnackBar) na parte inferior da tela.
-void showAppSnackBar(BuildContext context, String message) {
+///
+/// Com [error] = true, usa a cor de alerta e o ícone de erro.
+void showAppSnackBar(BuildContext context, String message, {bool error = false}) {
   final messenger = ScaffoldMessenger.of(context);
   messenger.hideCurrentSnackBar();
   messenger.showSnackBar(
     SnackBar(
+      backgroundColor: error ? AppColors.red : AppColors.navy,
       content: Row(
         children: [
-          const Icon(Icons.check, color: AppColors.white, size: 20),
+          Icon(
+            error ? Icons.error_outline : Icons.check,
+            color: AppColors.white,
+            size: 20,
+          ),
           const SizedBox(width: 9),
           Expanded(child: Text(message)),
         ],

@@ -23,3 +23,16 @@ class Question {
     );
   }
 }
+
+/// Dados digitados no formulário de pergunta (criação ou edição).
+class QuestionDraft {
+  final String statement;
+  final bool answer;
+  final String explanation;
+
+  const QuestionDraft({
+    required this.statement,
+    required this.answer,
+    required this.explanation,
+  });
+}
