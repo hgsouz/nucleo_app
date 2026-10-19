@@ -5,6 +5,7 @@ import 'screens/city_game_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/myth_game_screen.dart';
+import 'screens/questions_screen.dart';
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
 
@@ -57,6 +58,27 @@ class _NucleoAppState extends State<NucleoApp> {
               _state.addXp(300);
               _state.setCityProgress(100);
             },
+          ),
+        );
+        break;
+      case AppRoutes.questions:
+        builder = (context) => ListenableBuilder(
+          listenable: _state,
+          builder: (context, _) => QuestionsScreen(
+            questions: _state.questions,
+            userName: _state.userName,
+            onCreate: (draft) => _state.addQuestion(
+              statement: draft.statement,
+              answer: draft.answer,
+              explanation: draft.explanation,
+            ),
+            onUpdate: (id, draft) => _state.updateQuestion(
+              id,
+              statement: draft.statement,
+              answer: draft.answer,
+              explanation: draft.explanation,
+            ),
+            onDelete: _state.removeQuestion,
           ),
         );
         break;
