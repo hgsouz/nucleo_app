@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'routes.dart';
 import 'screens/home_screen.dart';
+import 'screens/myth_game_screen.dart';
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
 
@@ -30,6 +31,21 @@ class _NucleoAppState extends State<NucleoApp> {
     WidgetBuilder builder;
 
     switch (settings.name) {
+      case AppRoutes.myth:
+        builder = (context) => ListenableBuilder(
+          listenable: _state,
+          builder: (context, _) => MythGameScreen(
+            questions: _state.questions,
+            userName: _state.userName,
+            onFinish: (score, correct, total) {
+              _state.addXp(score);
+              _state.setMythProgress(
+                total == 0 ? 0 : (correct * 100 / total).round(),
+              );
+            },
+          ),
+        );
+        break;
       case AppRoutes.home:
       default:
         builder = (context) => ListenableBuilder(

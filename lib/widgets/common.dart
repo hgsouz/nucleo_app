@@ -137,7 +137,7 @@ class ProgressBar extends StatelessWidget {
         color: track,
         alignment: Alignment.centerLeft,
         child: FractionallySizedBox(
-          widthFactor: value.clamp(0.0, 1.0),
+          widthFactor: value.clamp(0.0, 1.0).toDouble(),
           child: Container(color: color),
         ),
       ),
