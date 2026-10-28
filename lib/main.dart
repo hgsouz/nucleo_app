@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'routes.dart';
 import 'screens/city_game_screen.dart';
+import 'screens/explanation_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/myth_game_screen.dart';
@@ -36,51 +37,63 @@ class _NucleoAppState extends State<NucleoApp> {
     switch (settings.name) {
       case AppRoutes.myth:
         builder = (context) => ListenableBuilder(
-          listenable: _state,
-          builder: (context, _) => MythGameScreen(
-            questions: _state.questions,
-            userName: _state.userName,
-            onFinish: (score, correct, total) {
-              _state.addXp(score);
-              _state.setMythProgress(
-                total == 0 ? 0 : (correct * 100 / total).round(),
-              );
-            },
-          ),
-        );
+              listenable: _state,
+              builder: (context, _) => MythGameScreen(
+                questions: _state.questions,
+                userName: _state.userName,
+                onFinish: (score, correct, total) {
+                  _state.addXp(score);
+                  _state.setMythProgress(
+                    total == 0 ? 0 : (correct * 100 / total).round(),
+                  );
+                },
+              ),
+            );
         break;
       case AppRoutes.city:
         builder = (context) => ListenableBuilder(
-          listenable: _state,
-          builder: (context, _) => CityGameScreen(
-            userName: _state.userName,
-            onWin: () {
-              _state.addXp(300);
-              _state.setCityProgress(100);
-            },
-          ),
-        );
+              listenable: _state,
+              builder: (context, _) => CityGameScreen(
+                userName: _state.userName,
+                onWin: () {
+                  _state.addXp(300);
+                  _state.setCityProgress(100);
+                },
+              ),
+            );
         break;
       case AppRoutes.questions:
         builder = (context) => ListenableBuilder(
-          listenable: _state,
-          builder: (context, _) => QuestionsScreen(
-            questions: _state.questions,
-            userName: _state.userName,
-            onCreate: (draft) => _state.addQuestion(
-              statement: draft.statement,
-              answer: draft.answer,
-              explanation: draft.explanation,
-            ),
-            onUpdate: (id, draft) => _state.updateQuestion(
-              id,
-              statement: draft.statement,
-              answer: draft.answer,
-              explanation: draft.explanation,
-            ),
-            onDelete: _state.removeQuestion,
-          ),
-        );
+              listenable: _state,
+              builder: (context, _) => QuestionsScreen(
+                questions: _state.questions,
+                userName: _state.userName,
+                onCreate: (draft) => _state.addQuestion(
+                  statement: draft.statement,
+                  answer: draft.answer,
+                  explanation: draft.explanation,
+                ),
+                onUpdate: (id, draft) => _state.updateQuestion(
+                  id,
+                  statement: draft.statement,
+                  answer: draft.answer,
+                  explanation: draft.explanation,
+                ),
+                onDelete: _state.removeQuestion,
+              ),
+            );
+        break;
+      case AppRoutes.explanation:
+        // Id da pergunta recebido como argumento da rota.
+        final questionId =
+            settings.arguments is int ? settings.arguments as int : null;
+        builder = (context) => ListenableBuilder(
+              listenable: _state,
+              builder: (context, _) => ExplanationScreen(
+                questionId: questionId,
+                questions: _state.questions,
+              ),
+            );
         break;
       case AppRoutes.login:
         builder = (context) => LoginScreen(onLogin: _state.login);
@@ -88,20 +101,19 @@ class _NucleoAppState extends State<NucleoApp> {
       case AppRoutes.home:
       default:
         // Nome recebido como argumento da rota (vem da tela de login).
-        final welcomeName = settings.arguments is String
-            ? settings.arguments as String
-            : null;
+        final welcomeName =
+            settings.arguments is String ? settings.arguments as String : null;
         builder = (context) => ListenableBuilder(
-          listenable: _state,
-          builder: (context, _) => HomeScreen(
-            userName: _state.userName,
-            xp: _state.xp,
-            mythProgress: _state.mythProgress,
-            cityProgress: _state.cityProgress,
-            ranking: _state.ranking,
-            welcomeName: welcomeName,
-          ),
-        );
+              listenable: _state,
+              builder: (context, _) => HomeScreen(
+                userName: _state.userName,
+                xp: _state.xp,
+                mythProgress: _state.mythProgress,
+                cityProgress: _state.cityProgress,
+                ranking: _state.ranking,
+                welcomeName: welcomeName,
+              ),
+            );
     }
 
     return MaterialPageRoute<dynamic>(builder: builder, settings: settings);

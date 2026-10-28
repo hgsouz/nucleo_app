@@ -148,7 +148,8 @@ class _HeroCard extends StatelessWidget {
           const Positioned(
             right: 4,
             bottom: 16,
-            child: Opacity(opacity: 0.88, child: NucleoLogo(size: 102, white: true)),
+            child: Opacity(
+                opacity: 0.88, child: NucleoLogo(size: 102, white: true)),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 29, 24, 29),
@@ -276,11 +277,15 @@ class _AboutSection extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: _benefits.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              mainAxisExtent: 148,
+              mainAxisExtent: 164 *
+                  MediaQuery.textScalerOf(context)
+                      .scale(1)
+                      .clamp(1.0, 1.6)
+                      .toDouble(),
             ),
             itemBuilder: (context, index) {
               final benefit = _benefits[index];
@@ -710,7 +715,8 @@ class _InviteCard extends StatelessWidget {
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
                   ),
                   SizedBox(height: 2),
-                  Text('Ganhe 150 XP por novo explorador', style: AppText.small),
+                  Text('Ganhe 150 XP por novo explorador',
+                      style: AppText.small),
                 ],
               ),
             ),

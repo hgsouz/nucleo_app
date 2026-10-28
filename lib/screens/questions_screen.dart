@@ -91,17 +91,33 @@ class QuestionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.cream,
+        foregroundColor: AppColors.navy,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: const Text('Banco de perguntas', style: AppText.h2),
+        actions: [
+          IconButton(
+            tooltip: 'Conta',
+            icon: const Icon(Icons.person_outline),
+            onPressed: () => Navigator.of(context).pushNamed(AppRoutes.login),
+          ),
+          const SizedBox(width: 6),
+        ],
+      ),
       bottomNavigationBar: const NucleoBottomNav(current: AppRoutes.questions),
       body: SafeArea(
         bottom: false,
         child: ListView(
-          padding: const EdgeInsets.only(bottom: 24),
+          padding: const EdgeInsets.only(top: 4, bottom: 24),
           children: [
-            PageHeader(
-              title: 'Banco de perguntas',
-              subtitle: '${questions.length} itens publicados',
-              showBack: true,
-              userName: userName,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(22, 0, 22, 14),
+              child: Text(
+                '${questions.length} itens publicados',
+                style: AppText.body.copyWith(fontSize: 14),
+              ),
             ),
             _buildIntro(),
             Padding(
@@ -131,6 +147,11 @@ class QuestionsScreen extends StatelessWidget {
                 child: _QuestionItem(
                   number: i + 1,
                   question: questions[i],
+                  // Envia o id da pergunta para a tela de explicação.
+                  onOpen: () => Navigator.of(context).pushNamed(
+                    AppRoutes.explanation,
+                    arguments: questions[i].id,
+                  ),
                   onEdit: () => _edit(context, questions[i]),
                   onDelete: () => _delete(context, questions[i]),
                 ),
@@ -201,12 +222,14 @@ class QuestionsScreen extends StatelessWidget {
 class _QuestionItem extends StatelessWidget {
   final int number;
   final Question question;
+  final VoidCallback onOpen;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const _QuestionItem({
     required this.number,
     required this.question,
+    required this.onOpen,
     required this.onEdit,
     required this.onDelete,
   });
@@ -215,76 +238,100 @@ class _QuestionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isTrue = question.answer;
 
-    return SoftCard(
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      color: AppColors.white,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: AppColors.navy.withValues(alpha: 0.06)),
+      ),
+      child: InkWell(
+        onTap: onOpen,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                number.toString().padLeft(2, '0'),
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFFB3BAC3),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                decoration: BoxDecoration(
-                  color: isTrue ? AppColors.greenPale : AppColors.redPale,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  isTrue ? 'VERDADE' : 'MITO',
-                  style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.7,
-                    color: isTrue ? AppColors.green : AppColors.red,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    number.toString().padLeft(2, '0'),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFFB3BAC3),
+                    ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isTrue ? AppColors.greenPale : AppColors.redPale,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isTrue ? 'VERDADE' : 'MITO',
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.7,
+                        color: isTrue ? AppColors.green : AppColors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 13),
+              Text(question.statement, style: AppText.h3),
+              const SizedBox(height: 8),
+              Text(
+                question.explanation,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  height: 1.5,
+                  color: AppColors.textMuted,
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 13),
-          Text(question.statement, style: AppText.h3),
-          const SizedBox(height: 8),
-          Text(
-            question.explanation,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 11,
-              height: 1.5,
-              color: AppColors.textMuted,
-            ),
-          ),
-          const SizedBox(height: 15),
-          const Divider(height: 1, color: Color(0xFFEEE7E7)),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              _ActionChip(
-                icon: Icons.edit_outlined,
-                label: 'Editar',
-                color: AppColors.blue,
-                background: AppColors.bluePale,
-                onTap: onEdit,
-              ),
-              const SizedBox(width: 8),
-              _ActionChip(
-                icon: Icons.delete_outline,
-                label: 'Excluir',
-                color: AppColors.red,
-                background: AppColors.redPale,
-                onTap: onDelete,
+              const SizedBox(height: 15),
+              const Divider(height: 1, color: Color(0xFFEEE7E7)),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _ActionChip(
+                    icon: Icons.menu_book_outlined,
+                    label: 'Explicação',
+                    color: AppColors.navy,
+                    background: AppColors.creamDeep,
+                    onTap: onOpen,
+                  ),
+                  _ActionChip(
+                    icon: Icons.edit_outlined,
+                    label: 'Editar',
+                    color: AppColors.blue,
+                    background: AppColors.bluePale,
+                    onTap: onEdit,
+                  ),
+                  _ActionChip(
+                    icon: Icons.delete_outline,
+                    label: 'Excluir',
+                    color: AppColors.red,
+                    background: AppColors.redPale,
+                    onTap: onDelete,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

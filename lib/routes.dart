@@ -9,6 +9,7 @@ class AppRoutes {
   static const String city = '/cidade';
   static const String login = '/login';
   static const String questions = '/perguntas';
+  static const String explanation = '/explicacao';
 }
 
 /// Navegação da barra inferior.
