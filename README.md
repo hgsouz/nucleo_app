@@ -7,10 +7,11 @@ população a entender a energia nuclear de forma leve, didática e sem medo.
 
 ## Integrantes da equipe
 
-<!-- Preencha com o nome e o RM de cada integrante -->
-- Nome do integrante 1 — RM 000000
-- Nome do integrante 2 — RM 000000
-- Nome do integrante 3 — RM 000000
+- Cassio Alexandre Ribeiro de Moraes  - RM 567295
+- Davi Isac Colin pereira             - RM 567265
+- Hugo Souza de Jesus                 - RM 568542
+- Matheus Peres Moraes de Jesus       - RM 567300
+- Pedro Gonçalves Rodrigues           - RM 567651
 
 ## Empresa / parceiro
 
@@ -59,32 +60,6 @@ Paleta com a regra 60/30/10:
 | 30% — ações e destaques | Azul | `#1971C2` |
 | 10% — contraste e texto | Navy | `#0B1F3A` |
 
-## Como executar
-
-Pré-requisito: [Flutter](https://docs.flutter.dev/get-started/install) instalado
-(`flutter doctor` sem erros).
-
-```bash
-# 1. Baixar as dependências
-flutter pub get
-
-# 2. Executar (emulador Android, simulador iOS, dispositivo ou navegador)
-flutter run
-flutter run -d chrome   # versão Web
-```
-
-Se as pastas `android/`, `ios/` e `web/` ainda não existirem no projeto, gere-as uma única vez:
-
-```bash
-flutter create . --project-name nucleo_app --platforms=android,ios,web
-```
-
-Testes automatizados:
-
-```bash
-flutter test
-```
-
 ## Estrutura do projeto
 
 ```
@@ -104,10 +79,9 @@ assets/images/logo.png     # Logo do Núcleo
 
 - Flutter e Dart
 - Material Design 3
-- Git e GitHub (GitHub Classroom)
+- Git e GitHub 
 - Figma (protótipo de interface)
 
 ## Vídeo de demonstração
 
-<!-- Cole aqui o link do YouTube (não listado) -->
 [Assistir ao vídeo](https://www.youtube.com/)
